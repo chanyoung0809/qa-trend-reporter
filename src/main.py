@@ -148,9 +148,9 @@ def send_discord_message(category_name, all_results):
 if __name__ == "__main__":
     current_day = (datetime.utcnow() + timedelta(hours=9)).weekday()
     
-    # 🛠️ [테스트 모드] 문제가 되었던 월요일(웹 프론트엔드)을 다시 테스트해봅시다!
+    # 🛠️ [테스트 모드] 
     TEST_MODE = True
-    TEST_DAY_NUMBER = 3  # 0: 월요일 (웹 프론트엔드)
+    TEST_DAY_NUMBER = 4  # 0: 월요일 (웹 프론트엔드)
     
     if TEST_MODE:
         current_day = TEST_DAY_NUMBER
