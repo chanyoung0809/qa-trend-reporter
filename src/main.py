@@ -149,7 +149,7 @@ if __name__ == "__main__":
     current_day = (datetime.utcnow() + timedelta(hours=9)).weekday()
     
     # 🛠️ [테스트 모드] 
-    TEST_MODE = True
+    TEST_MODE = False
     TEST_DAY_NUMBER = 5  # 0: 월요일 (웹 프론트엔드)
     
     if TEST_MODE:
