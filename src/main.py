@@ -108,8 +108,9 @@ def send_discord_message(category_name, all_results):
             content += f"> {repo['desc']}\n"
             content += f"- [코드 보기]({repo['link']})\n"
             
+    # 디스코드는 한 번에 2000자까지만 전송 가능하므로 안전하게 길이 조절
     if len(content) > 2000:
-        content = content[:1990] + "...\n(메시지가 길어 생략되었습니다)"
+        content = content[:1900] + "...\n\n(🚨 메시지가 길어 일부가 생략되었습니다. 더 많은 정보는 GitHub에서 확인하세요!)"
         
     res = requests.post(webhook_url, json={"content": content})
     if res.status_code == 204:
