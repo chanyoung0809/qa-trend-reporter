@@ -150,7 +150,7 @@ if __name__ == "__main__":
     
     # 🛠️ [테스트 모드] 변경된 백엔드(금요일) 테마를 확인해봅시다!
     TEST_MODE = True
-    TEST_DAY_NUMBER = 4  # 4: 금요일(백엔드/자프링/고/러스트/노드)
+    TEST_DAY_NUMBER = 0  # 4: 금요일(백엔드/자프링/고/러스트/노드)
     
     if TEST_MODE:
         current_day = TEST_DAY_NUMBER
