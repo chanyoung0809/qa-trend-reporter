@@ -7,37 +7,36 @@ from deep_translator import GoogleTranslator
 # ==========================================
 # 1. 설정: 요일별 QA 기술 테마 (월~토)
 # ==========================================
-# 🔥 개선: 공식 레포지토리(-repo)를 제외하여 생태계 주변의 핫한 프로젝트를 발굴합니다.
 CATEGORY_MAP = {
     0: { 
         "name": "🌐 웹 프론트엔드", 
-        "queries": ["topic:react -repo:facebook/react", "topic:typescript", "topic:nextjs -repo:vercel/next.js"] 
+        # 🔥 TS 제거, Vue 추가, React 검색 시 모바일(React-Native) 완벽 분리
+        "queries": ["topic:react -topic:react-native -repo:facebook/react", "topic:nextjs -repo:shadcn-ui/ui", "topic:vue -repo:vuejs/vue"] 
     },
     1: { 
         "name": "📱 모바일 앱", 
-        "queries": ["topic:flutter -repo:flutter/flutter", "topic:react-native -repo:facebook/react-native", "language:kotlin topic:android", "language:swift topic:ios"] 
+        "queries": ["topic:flutter", "topic:react-native", "language:kotlin topic:android", "language:swift topic:ios"] 
     },
     2: { 
         "name": "🧪 테스트 자동화 & API 도구", 
-        "queries": ["topic:playwright -repo:microsoft/playwright", "topic:cypress -repo:cypress-io/cypress", "topic:postman", "topic:selenium -repo:SeleniumHQ/selenium"] 
+        "queries": ["topic:playwright", "topic:cypress", "topic:postman", "topic:selenium"] 
     },
     3: { 
         "name": "🏗️ CI/CD & 인프라 (DevOps)", 
-        "queries": ["topic:jenkins -repo:jenkinsci/jenkins", "topic:kubernetes -repo:kubernetes/kubernetes", "topic:docker -repo:docker/cli", "topic:github-actions"] 
+        "queries": ["topic:jenkins", "topic:kubernetes", "topic:docker", "topic:github-actions"] 
     },
     4: { 
         "name": "⚙️ 백엔드", 
-        # 🔥 개선: Spring으로 통합하고 Go, Rust, Node.js 추가
-        "queries": ["topic:spring -repo:spring-projects/spring-boot", "language:go", "language:rust", "topic:nodejs -repo:nodejs/node"] 
+        "queries": ["topic:spring", "language:go", "language:rust", "topic:nodejs"] 
     },
     5: { 
         "name": "🤖 AI 에이전트 & 데이터 분석", 
-        "queries": ["topic:ai-agent", "topic:langchain -repo:langchain-ai/langchain", "topic:pandas -repo:pandas-dev/pandas", "topic:grafana -repo:grafana/grafana"] 
+        "queries": ["topic:ai-agent", "topic:langchain", "topic:pandas", "topic:grafana"] 
     }
 }
 
 EMOJI_MAP = {
-    "REACT": "⚛️", "REACT-NATIVE": "📱", "TYPESCRIPT": "📘", "NEXTJS": "▲",
+    "REACT": "⚛️", "REACT-NATIVE": "📱", "VUE": "🟩", "NEXTJS": "▲",
     "ANDROID": "🤖", "IOS": "🍏", "FLUTTER": "🦋",
     "PLAYWRIGHT": "🎭", "CYPRESS": "🌲", "POSTMAN": "📮", "SELENIUM": "✅",
     "JENKINS": "🤵‍♂️", "KUBERNETES": "☸️", "DOCKER": "🐳", "GITHUB-ACTIONS": "🐙", 
@@ -49,12 +48,15 @@ EMOJI_MAP = {
 # 2. 데이터 수집: GitHub Search API 호출
 # ==========================================
 def get_github_search_trends(query, fetch_limit):
-    """최근 7일간 업데이트된 핫한 프로젝트를 가져옵니다."""
     seven_days_ago = (datetime.utcnow() - timedelta(days=7)).strftime('%Y-%m-%d')
+    # 🔥 핵심 비법: 최근 2년(730일) 이내에 만들어진 신규 핫플 프로젝트만 가져옵니다! (고인물 원천 차단)
+    two_years_ago = (datetime.utcnow() - timedelta(days=730)).strftime('%Y-%m-%d')
+    
     url = "https://api.github.com/search/repositories"
     
     params = {
-        "q": f"{query} pushed:>{seven_days_ago}",
+        # pushed(최근 업데이트)와 created(생성일) 조건을 동시에 적용
+        "q": f"{query} pushed:>{seven_days_ago} created:>{two_years_ago}",
         "sort": "stars",
         "order": "desc",
         "per_page": fetch_limit 
@@ -101,7 +103,6 @@ def send_discord_message(category_name, all_results):
     now_kst = datetime.utcnow() + timedelta(hours=9)
     date_str = f"{now_kst.month}월 {now_kst.day}일"
     
-    # 디스코드 요약본에 쓸 깔끔한 키워드 추출
     clean_keywords = []
     for q in all_results.keys():
         base_word = q.split()[0]
@@ -122,7 +123,6 @@ def send_discord_message(category_name, all_results):
     for query, repos in all_results.items():
         if not repos: continue
         
-        # 키워드 정리 (예: "topic:react -repo:..." -> "REACT")
         keyword = query.split()[0].replace("topic:", "").replace("language:", "").upper()
         emoji = EMOJI_MAP.get(keyword, "📌")
         
@@ -148,9 +148,9 @@ def send_discord_message(category_name, all_results):
 if __name__ == "__main__":
     current_day = (datetime.utcnow() + timedelta(hours=9)).weekday()
     
-    # 🛠️ [테스트 모드] 변경된 백엔드(금요일) 테마를 확인해봅시다!
+    # 🛠️ [테스트 모드] 문제가 되었던 월요일(웹 프론트엔드)을 다시 테스트해봅시다!
     TEST_MODE = True
-    TEST_DAY_NUMBER = 0  # 4: 금요일(백엔드/자프링/고/러스트/노드)
+    TEST_DAY_NUMBER = 0  # 0: 월요일 (웹 프론트엔드)
     
     if TEST_MODE:
         current_day = TEST_DAY_NUMBER
@@ -160,7 +160,6 @@ if __name__ == "__main__":
         category = CATEGORY_MAP[current_day]
         print(f"=== {category['name']} 분석 시작 ===")
         
-        # 🔥 개선: 항목이 4개 이상이면 상위 2개, 3개 이하면 상위 3개로 노출 제한
         query_count = len(category['queries'])
         fetch_limit = 2 if query_count >= 4 else 3
         
