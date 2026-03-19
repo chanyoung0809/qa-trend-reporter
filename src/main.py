@@ -124,7 +124,7 @@ if __name__ == "__main__":
     
     # 🛠️ [테스트 모드] 현재 '목요일(인프라)' 테마가 전송되도록 설정되어 있습니다.
     TEST_MODE = True
-    TEST_DAY_NUMBER = 3
+    TEST_DAY_NUMBER = 0
     
     if TEST_MODE:
         current_day = TEST_DAY_NUMBER
