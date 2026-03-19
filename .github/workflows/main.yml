@@ -6,6 +6,10 @@ on:
     - cron: '0 3 * * *'
   workflow_dispatch: # 직접 버튼을 눌러 테스트할 수 있게 해주는 마법의 옵션
 
+# 👇 이 두 줄을 추가하면 Node.js 경고 메시지가 깔끔하게 사라집니다!
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  
 jobs:
   run-bot:
     runs-on: ubuntu-latest # GitHub이 무료로 제공하는 일꾼 컴퓨터
