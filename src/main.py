@@ -12,7 +12,7 @@ CATEGORY_MAP = {
     1: { "name": "📱 모바일 앱", "queries": ["topic:android", "topic:ios", "topic:flutter"] },
     2: { "name": "🧪 테스트 자동화 & API 도구", "queries": ["topic:playwright", "topic:cypress", "topic:postman", "topic:selenium"] },
     3: { "name": "🏗️ CI/CD & 인프라 (DevOps)", "queries": ["topic:jenkins", "topic:docker", "topic:github-actions", "topic:kubernetes"] },
-    4: { "name": "⚙️ 백엔드 & 자프링", "queries": ["topic:spring-boot", "topic:spring-framework", "language:java"] },
+    4: { "name": "⚙️ 백엔드", "queries": ["topic:spring-boot", "topic:spring-framework", "language:java"] },
     5: { "name": "🤖 AI 에이전트 & 데이터 분석", "queries": ["topic:ai-agent", "topic:langchain", "topic:pandas", "topic:grafana"] }
 }
 
@@ -21,7 +21,7 @@ EMOJI_MAP = {
     "ANDROID": "🤖", "IOS": "🍏", "FLUTTER": "🦋",
     "PLAYWRIGHT": "🎭", "CYPRESS": "🌲", "POSTMAN": "📮", "SELENIUM": "✅",
     "JENKINS": "🤵‍♂️", "DOCKER": "🐳", "GITHUB-ACTIONS": "🐙", "KUBERNETES": "☸️",
-    "SPRING-BOOT": "🍃", "SPRING-FRAMEWORK": "🌿", "JAVA": "☕",
+    "JAVA": "☕", "SPRING-BOOT": "🍃", "node" : "🫛"
     "AI-AGENT": "🤖", "LANGCHAIN": "🦜", "PANDAS": "🐼", "GRAFANA": "📊"
 }
 
