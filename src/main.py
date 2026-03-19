@@ -21,7 +21,7 @@ EMOJI_MAP = {
     "ANDROID": "🤖", "IOS": "🍏", "FLUTTER": "🦋",
     "PLAYWRIGHT": "🎭", "CYPRESS": "🌲", "POSTMAN": "📮", "SELENIUM": "✅",
     "JENKINS": "🤵‍♂️", "DOCKER": "🐳", "GITHUB-ACTIONS": "🐙", "KUBERNETES": "☸️",
-    "JAVA": "☕", "SPRING-BOOT": "🍃", "node" : "🫛"
+    "JAVA": "☕", "SPRING-BOOT": "🍃", "node" : "🫛",
     "AI-AGENT": "🤖", "LANGCHAIN": "🦜", "PANDAS": "🐼", "GRAFANA": "📊"
 }
 
