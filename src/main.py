@@ -150,7 +150,7 @@ if __name__ == "__main__":
     
     # 🛠️ [테스트 모드] 
     TEST_MODE = True
-    TEST_DAY_NUMBER = 4  # 0: 월요일 (웹 프론트엔드)
+    TEST_DAY_NUMBER = 5  # 0: 월요일 (웹 프론트엔드)
     
     if TEST_MODE:
         current_day = TEST_DAY_NUMBER
