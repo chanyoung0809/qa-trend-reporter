@@ -91,7 +91,7 @@ def send_discord_message(category_name, all_results):
     else:
         content += f"오늘의 {category_name} 트렌드는\n"
         content += f"**{', '.join(keywords)}** 중심으로\n"
-        content += f"총 {total_count}개의 핫한 프로젝트가 선정되었습니다.\n\n"
+        content += f"총 {total_count}개의 핫한 프로젝트가 선정되었습니다🔥\n\n"
 
     for query, repos in all_results.items():
         if not repos: continue
