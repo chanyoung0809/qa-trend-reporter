@@ -2,7 +2,7 @@ name: QA Tech Trend Bot (점심시간 배송)
 
 on:
   schedule:
-    - cron: '45 2 * * *'
+    - cron: '15 2 * * *'
   workflow_dispatch:
 
 # 노란색 경고창(Node.js 20 deprecation)을 없애주는 마법의 코드
