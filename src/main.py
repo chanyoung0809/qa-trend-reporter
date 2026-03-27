@@ -57,8 +57,8 @@ def get_github_search_trends(query, fetch_limit):
         "q": f"{query} pushed:>{seven_days_ago} created:>{two_years_ago}",
         "sort": "stars",
         "order": "desc",
-        # 🔥 기존엔 2~3개만 가져와서 매일 똑같았지만, 이제 상위 15개를 넉넉히 풀(Pool)로 가져옵니다!
-        "per_page": 15 
+        # 🔥 기존엔 2~3개만 가져와서 매일 똑같았지만, 이제 상위 10개를 넉넉히 풀(Pool)로 가져옵니다!
+        "per_page": 10 
     }
     
     headers = {}
@@ -124,7 +124,7 @@ def send_discord_message(category_name, all_results):
     else:
         content += f"오늘의 {category_name} 트렌드는\n"
         content += f"**{', '.join(clean_keywords)}** 중심으로\n"
-        content += f"총 {total_count}개의 핫한 프로젝트가 선정되었습니다.\n\n"
+        content += f"총 {total_count}개의 핫한 프로젝트가 선정되었습니다🔥\n\n"
 
     for query, repos in all_results.items():
         if not repos: continue
@@ -132,7 +132,7 @@ def send_discord_message(category_name, all_results):
         keyword = query.split()[0].replace("topic:", "").replace("language:", "").upper()
         emoji = EMOJI_MAP.get(keyword, "📌")
         
-        content += f"## {emoji} {keyword} 테마 TOP {len(repos)}\n\n"
+        content += f"## {emoji} {keyword} 테마 HOT {len(repos)}\n\n"
             
         for idx, repo in enumerate(repos, 1):
             stars_fmt = f"{repo['stars']:,}"
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     current_day = (datetime.utcnow() + timedelta(hours=9)).weekday()
     
     # 🛠️ [테스트 모드] 금요일(백엔드)을 켜두었습니다. 코덱스 말고 다른 게 나오는지 돌려보세요!
-    TEST_MODE = True
+    TEST_MODE = False
     TEST_DAY_NUMBER = 4  
     
     if TEST_MODE:
