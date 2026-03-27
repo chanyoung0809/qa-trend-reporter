@@ -1,6 +1,7 @@
 import os
 import time
 import requests
+import random  # 🔥 매주 다채로운 결과를 뽑기 위해 추가!
 from datetime import datetime, timedelta
 from deep_translator import GoogleTranslator
 
@@ -10,7 +11,6 @@ from deep_translator import GoogleTranslator
 CATEGORY_MAP = {
     0: { 
         "name": "🌐 웹 프론트엔드", 
-        # 🔥 TS 제거, Vue 추가, React 검색 시 모바일(React-Native) 완벽 분리
         "queries": ["topic:react -topic:react-native -repo:facebook/react", "topic:nextjs -repo:shadcn-ui/ui", "topic:vue -repo:vuejs/vue"] 
     },
     1: { 
@@ -49,17 +49,16 @@ EMOJI_MAP = {
 # ==========================================
 def get_github_search_trends(query, fetch_limit):
     seven_days_ago = (datetime.utcnow() - timedelta(days=7)).strftime('%Y-%m-%d')
-    # 🔥 핵심 비법: 최근 2년(730일) 이내에 만들어진 신규 핫플 프로젝트만 가져옵니다! (고인물 원천 차단)
     two_years_ago = (datetime.utcnow() - timedelta(days=730)).strftime('%Y-%m-%d')
     
     url = "https://api.github.com/search/repositories"
     
     params = {
-        # pushed(최근 업데이트)와 created(생성일) 조건을 동시에 적용
         "q": f"{query} pushed:>{seven_days_ago} created:>{two_years_ago}",
         "sort": "stars",
         "order": "desc",
-        "per_page": fetch_limit 
+        # 🔥 기존엔 2~3개만 가져와서 매일 똑같았지만, 이제 상위 15개를 넉넉히 풀(Pool)로 가져옵니다!
+        "per_page": 15 
     }
     
     headers = {}
@@ -89,6 +88,13 @@ def get_github_search_trends(query, fetch_limit):
                 'forks': int(item['forks_count']), 
                 'desc': desc_ko
             })
+            
+        # 🔥 핵심 로직: 가져온 15개 중에서 우리가 보여줄 개수(2~3개)만큼만 '랜덤'으로 뽑습니다.
+        if len(repos) > fetch_limit:
+            repos = random.sample(repos, fetch_limit)
+            # 뽑힌 애들을 디스코드에 예쁘게 내보내기 위해 다시 별점 순으로 정렬합니다.
+            repos.sort(key=lambda x: x['stars'], reverse=True)
+            
         return repos
     except:
         return []
@@ -118,7 +124,7 @@ def send_discord_message(category_name, all_results):
     else:
         content += f"오늘의 {category_name} 트렌드는\n"
         content += f"**{', '.join(clean_keywords)}** 중심으로\n"
-        content += f"총 {total_count}개의 핫한 프로젝트가 선정되었습니다 🔥 \n\n"
+        content += f"총 {total_count}개의 핫한 프로젝트가 선정되었습니다.\n\n"
 
     for query, repos in all_results.items():
         if not repos: continue
@@ -148,9 +154,9 @@ def send_discord_message(category_name, all_results):
 if __name__ == "__main__":
     current_day = (datetime.utcnow() + timedelta(hours=9)).weekday()
     
-    # 🛠️ [테스트 모드] 
-    TEST_MODE = False
-    TEST_DAY_NUMBER = 5  # 0: 월요일 (웹 프론트엔드)
+    # 🛠️ [테스트 모드] 금요일(백엔드)을 켜두었습니다. 코덱스 말고 다른 게 나오는지 돌려보세요!
+    TEST_MODE = True
+    TEST_DAY_NUMBER = 4  
     
     if TEST_MODE:
         current_day = TEST_DAY_NUMBER
